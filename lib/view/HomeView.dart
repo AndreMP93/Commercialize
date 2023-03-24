@@ -1,3 +1,4 @@
+import 'package:commercialize/helper/ScreenRoutes.dart';
 import 'package:commercialize/res/app_strings.dart';
 import 'package:flutter/material.dart';
 
@@ -10,10 +11,12 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
 
-  final List<String> _menuItems = <String>[AppStrings.profileMenuItem, AppStrings.logoutMenuItem];
-  
+  List<String> _menuItems = <String>[];
+
+
   @override
   Widget build(BuildContext context) {
+    _checkLoggedUser();
     return Scaffold(
       appBar: AppBar(
         title: const Text(AppStrings.appName),
@@ -44,6 +47,22 @@ class _HomeViewState extends State<HomeView> {
         // await _authViewModel.logout();
         // Navigator.pushReplacementNamed(context, ScreenRoutes.LOGIN_ROUTE);
         break;
+
+      case AppStrings.advertsMenuItem:
+        Navigator.pushNamed(context, ScreenRoutes.MY_ADS_ROUTE);
+        break;
+
+      case AppStrings.loginMenuItem:
+        Navigator.pushReplacementNamed(context, ScreenRoutes.LOGIN_ROUTE);
+    }
+  }
+
+  Future _checkLoggedUser() async{
+    var checked = true;
+    if(checked){
+      _menuItems = [AppStrings.advertsMenuItem, AppStrings.profileMenuItem, AppStrings.logoutMenuItem];
+    }else{
+      _menuItems = [AppStrings.loginMenuItem];
     }
   }
 }

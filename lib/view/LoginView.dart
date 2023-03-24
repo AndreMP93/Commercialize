@@ -63,6 +63,10 @@ class _LoginViewState extends State<LoginView> {
                         controller: _emailController,
                         icon: const Icon(Icons.email,),
                         keyboardType: TextInputType.emailAddress,
+                        style: const TextStyle(color: Colors.white, fontSize: 20),
+                        labelStyle: const TextStyle(color: Colors.white, fontSize: 20),
+                        focusColor: Colors.white,
+                        enabledColor: AppColors.darkBlue,
                       )
                     )
                 ),
@@ -75,6 +79,10 @@ class _LoginViewState extends State<LoginView> {
                           controller: _passwordController,
                           icon: const Icon(Icons.lock),
                           isPassword: true,
+                          style: const TextStyle(color: Colors.white, fontSize: 20),
+                          labelStyle: const TextStyle(color: Colors.white, fontSize: 20),
+                          focusColor: Colors.white,
+                          enabledColor: AppColors.darkBlue,
                         )
                     )
                 ),

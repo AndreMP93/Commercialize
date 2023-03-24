@@ -7,8 +7,8 @@ import 'package:provider/provider.dart';
 import 'helper/ScreenRoutes.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp();
   runApp(MyApp());
 }
 
