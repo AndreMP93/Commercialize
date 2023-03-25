@@ -52,7 +52,6 @@ abstract class _AuthenticationViewModelBase with Store{
 
   @action
   Future<void> logout() async {
-    _teste();
     String result = await _auth.signOut();
     if(result.isEmpty){
       isLoading = false;
@@ -72,18 +71,12 @@ abstract class _AuthenticationViewModelBase with Store{
       if(result.isEmpty){
         isLoading = true;
         await checkLoggedUser();
+        user.uId = userLogged!.uId;
       }
     }else{
       messageError = resultValidation;
       isLoading = false;
     }
     signingUp = false;
-  }
-
-  @action
-  _teste(){
-    if(isLoading){
-      print("object");
-    }
   }
 }

@@ -31,7 +31,7 @@ abstract class _RegisterUserViewModel with Store{
         errorMessage = result;
       }
     }catch(e){
-      errorMessage = "${AppStrings.registerUserError} $e";
+      errorMessage = "${AppStrings.registerUserError}: $e";
     }
     isRegisteringUser = false;
   }

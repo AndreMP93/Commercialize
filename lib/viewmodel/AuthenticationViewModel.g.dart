@@ -107,20 +107,6 @@ mixin _$AuthenticationViewModel on _AuthenticationViewModelBase, Store {
     return _$registerUserAsyncAction.run(() => super.registerUser(user));
   }
 
-  late final _$_AuthenticationViewModelBaseActionController =
-      ActionController(name: '_AuthenticationViewModelBase', context: context);
-
-  @override
-  dynamic _teste() {
-    final _$actionInfo = _$_AuthenticationViewModelBaseActionController
-        .startAction(name: '_AuthenticationViewModelBase._teste');
-    try {
-      return super._teste();
-    } finally {
-      _$_AuthenticationViewModelBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
   @override
   String toString() {
     return '''

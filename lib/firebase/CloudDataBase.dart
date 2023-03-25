@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:commercialize/model/Ad.dart';
 import 'package:commercialize/model/AppUser.dart';
 import 'package:commercialize/res/app_strings.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -9,7 +10,9 @@ class CloudDataBase {
   final _fireStore = FirebaseFirestore.instance;
   final FirebaseStorage _storageInstance = FirebaseStorage.instance;
   final String _userCollection = "users";
+  final String _adsCollection = "ads";
   final String _profilePicturePath = "profile";
+  final String _productPhotosPath = "my-ads";
 
 
   factory CloudDataBase(){
@@ -26,12 +29,13 @@ class CloudDataBase {
           .get();
       if(result.data()!=null){
         Map<String, dynamic> map = result.data()!;
-        AppUser appUser= AppUser.map(map);
+        AppUser appUser = AppUser.map(map);
         appUser.uId = uId;
         return appUser;
       }
       return null;
     }catch(error){
+      print("ERROR: $error");
       return null;
     }
   }
@@ -64,7 +68,26 @@ class CloudDataBase {
       }
       return AppStrings.registerUserError;
     }catch(onError){
-      return "${AppStrings.registerUserError} $onError";
+      return "${AppStrings.registerUserError}: $onError";
+    }
+  }
+
+  Future<String> registerAd(Ad ad) async{
+    try{
+      ad.id = _fireStore.collection(_adsCollection).doc().id;
+      await _fireStore.collection(_adsCollection).doc(ad.id).set(ad.toMap());
+      return "";
+    }catch(error){
+      return "${AppStrings.registerAdError}: $error";
+    }
+  }
+
+  Future<String> updateAd(Ad ad) async {
+    try{
+      await _fireStore.collection(_adsCollection).doc(ad.id).update(ad.toMap());
+      return "";
+    }catch(error){
+      return "${AppStrings.registerAdError} $error";
     }
   }
 
@@ -75,6 +98,23 @@ class CloudDataBase {
       return arquivo.putFile(imagem);
     }catch (e){
       return null;
+    }
+  }
+
+  Future<String> uploadProductPhoto(File imagem, Ad ad) async {
+    try{
+      final namePhoto = DateTime.now().microsecondsSinceEpoch.toString();
+      final pastaRaiz = _storageInstance.ref();
+      final arquivo = pastaRaiz
+          .child(_productPhotosPath)
+          .child(ad.id)
+          .child(namePhoto);
+      final TaskSnapshot snapshot = await arquivo.putFile(imagem).whenComplete(() => null);
+      String urlPhoto = await snapshot.ref.getDownloadURL();
+      ad.photos.add(urlPhoto);
+      return "";
+    }catch (e){
+      return e.toString();
     }
   }
 

@@ -45,7 +45,7 @@ class _HomeViewState extends State<HomeView> {
         break;
       case AppStrings.logoutMenuItem:
         // await _authViewModel.logout();
-        // Navigator.pushReplacementNamed(context, ScreenRoutes.LOGIN_ROUTE);
+        Navigator.pushReplacementNamed(context, ScreenRoutes.LOGIN_ROUTE);
         break;
 
       case AppStrings.advertsMenuItem:

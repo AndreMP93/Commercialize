@@ -1,7 +1,7 @@
 class ProducyCategories{
   static const List<String> listCategories = [
     "Automóveis",
-    "Imóveis"
+    "Imóveis",
     "Eletronicos",
     "Moda",
     "Mobília",

@@ -7,6 +7,7 @@ class AppStrings{
   static const passwordLabel = "Senha";
   static const loginButton = "Entrar";
   static const registerButton = "Cadastrar";
+  static const saveButton = "Salvar";
   static const createAnAccountLabel = "Criar Anúncio";
   static const registerUserLabel = "Cadastrar Usuário";
 
@@ -28,6 +29,7 @@ class AppStrings{
   static const registerErrorWeakPassword = "Temnte colocar uma senha que possua letra e números";
   static const registerErrorEmailAlreadyUse = "Já exite um usuário com esse endereço de email.";
   static const updateDataUserError = "Falhao ao atualizar os dados do usário!";
+  static const registerAdError = "Falha ao cadastrar o seu Anúncio! Tente novamente mais tarde.";
 
   //error messages for user login
   static const loginError = "Flha ao acessar a conta do usuário!";
