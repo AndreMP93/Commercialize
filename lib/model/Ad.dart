@@ -6,7 +6,7 @@ class Ad {
   late String price;
   late String phone;
   late String description;
-  late List<String> photos;
+  late List<dynamic> photos;
 
   Ad({
     this.id = "",

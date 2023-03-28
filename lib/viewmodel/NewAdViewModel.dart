@@ -1,6 +1,4 @@
-
 import 'dart:io';
-
 import 'package:commercialize/firebase/CloudDataBase.dart';
 import 'package:commercialize/model/Ad.dart';
 import 'package:commercialize/model/AppUser.dart';

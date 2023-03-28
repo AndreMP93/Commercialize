@@ -60,4 +60,11 @@ class AppStrings{
   static const requiredField = "Campo Obrigatorio";
   static const maxCharacters = "Máximo de 500 caracteres.";
 
+  //Edit Data Product
+  static const cancelButton = "Cancelar";
+  static const editTitle = "Digite um novo Titulo";
+  static const editPrice = "Digite um novo Preço";
+  static const editPhone = "Informe um telefone para contato";
+  static const editDescription = "Falhe um pouco mais sobre o seu produto";
+
 }

@@ -1,5 +1,6 @@
 import 'package:commercialize/res/app_strings.dart';
 import 'package:commercialize/viewmodel/AuthenticationViewModel.dart';
+import 'package:commercialize/viewmodel/MyAdsViewModel.dart';
 import 'package:commercialize/viewmodel/NewAdViewModel.dart';
 import 'package:commercialize/viewmodel/RegisterUserViewModel.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -24,7 +25,8 @@ class MyApp extends StatelessWidget {
         providers: [
           Provider<AuthenticationViewModel>(create: (_) => AuthenticationViewModel()),
           Provider<RegisterUserViewModel>(create: (_)=> RegisterUserViewModel(),),
-          Provider<NewAdViewModel>(create: (_) => NewAdViewModel())
+          Provider<NewAdViewModel>(create: (_) => NewAdViewModel()),
+          Provider<MyAdsViewModel>(create: (_) => MyAdsViewModel(),),
         ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -244,6 +244,7 @@ class _NewAdViewState extends State<NewAdView> {
                   CustomTextField(
                       labelText: AppStrings.phoneTextInput,
                       controller: _phoneController,
+                      keyboardType: TextInputType.number,
                       icon: const Icon(Icons.phone),
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:commercialize/helper/GetImage.dart';
 import 'package:commercialize/model/AppUser.dart';
 import 'package:commercialize/res/app_colors.dart';
@@ -10,7 +9,6 @@ import 'package:commercialize/viewmodel/RegisterUserViewModel.dart';
 import 'package:commercialize/widget/CustomTextField.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class RegisterUserView extends StatefulWidget {

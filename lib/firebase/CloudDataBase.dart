@@ -91,6 +91,42 @@ class CloudDataBase {
     }
   }
 
+  Future<List<Ad>> getAllUserAds(AppUser user) async {
+    try{
+      List<Ad> listAds = [];
+      for(var adId in user.myAds){
+        final result = await _fireStore.collection(_adsCollection).doc(adId).get();
+        if(result.data()!=null){
+          listAds.add(Ad.map(result.data()!));
+        }
+      }
+      return listAds;
+    }catch(error){
+      return [];
+    }
+  }
+
+  Future<Ad?> getAd(Ad ad) async{
+    try{
+      final result = await _fireStore.collection(_adsCollection).doc(ad.id).get();
+      if(result.data()!=null){
+        return Ad.map(result.data()!);
+      }
+    }catch(error){
+      print("Error: getAd-> $error");
+    }
+    return null;
+  }
+
+  Future<String> deleteAd(Ad ad) async{
+    try{
+      await _fireStore.collection(_adsCollection).doc(ad.id).delete();
+      return "";
+    }catch(error){
+      return "Error: -> $error";
+    }
+  }
+
   Future<UploadTask?> uploadProfilePicture(File imagem, String userID) async {
     try{
       final pastaRaiz = _storageInstance.ref();
