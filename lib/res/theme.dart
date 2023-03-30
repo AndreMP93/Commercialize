@@ -17,7 +17,7 @@ class CustomTheme {
       primaryColor: AppColors.white,
       colorScheme: ColorScheme.fromSwatch(
           primarySwatch: AppColors.whitePrimarySwatch,
-          primaryColorDark: Colors.grey,
+          primaryColorDark: AppColors.primaryColor,
         accentColor: AppColors.darkBlue
       ),
       scaffoldBackgroundColor: AppColors.primaryColor,

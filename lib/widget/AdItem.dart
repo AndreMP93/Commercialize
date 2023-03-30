@@ -5,7 +5,7 @@ class AdItem extends StatelessWidget {
   final Text price;
   final String urlProductPhoto;
   final Function() showAdDetails;
-  final Function deleteAd;
+  final Function() deleteAd;
   const AdItem({
     required this.title,
     required this.price,
@@ -41,14 +41,7 @@ class AdItem extends StatelessWidget {
                     ],),
                 ),
               ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  padding: EdgeInsets.all(10),
-                ),
-                onPressed: deleteAd(),
-                child: Icon(Icons.delete, color: Colors.white,),
-              )
+              IconButton(onPressed: deleteAd, icon: const Icon(Icons.delete, color: Colors.red,size: 32))
             ],
           ),
         ),

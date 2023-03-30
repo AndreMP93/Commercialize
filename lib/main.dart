@@ -1,5 +1,6 @@
 import 'package:commercialize/res/app_strings.dart';
 import 'package:commercialize/viewmodel/AuthenticationViewModel.dart';
+import 'package:commercialize/viewmodel/HomeViewModel.dart';
 import 'package:commercialize/viewmodel/MyAdsViewModel.dart';
 import 'package:commercialize/viewmodel/NewAdViewModel.dart';
 import 'package:commercialize/viewmodel/RegisterUserViewModel.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
           Provider<RegisterUserViewModel>(create: (_)=> RegisterUserViewModel(),),
           Provider<NewAdViewModel>(create: (_) => NewAdViewModel()),
           Provider<MyAdsViewModel>(create: (_) => MyAdsViewModel(),),
+          Provider<HomeViewModel>(create: (_) => HomeViewModel()),
         ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

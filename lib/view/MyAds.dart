@@ -26,7 +26,6 @@ class _MyAdsState extends State<MyAds> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      await authViewModel.checkLoggedUser();
       AppUser? user = authViewModel.userLogged;
       if(user!=null){
         await myAdsViewModel.getMyAds(user);
@@ -69,7 +68,9 @@ class _MyAdsState extends State<MyAds> {
                       price: Text(ad.price),
                       urlProductPhoto: ad.photos[0],
                       showAdDetails: (){Navigator.pushNamed(context, ScreenRoutes.AD_DETAILS_ROUTE, arguments: ad);},
-                      deleteAd: (){}
+                      deleteAd: () async {
+                        await myAdsViewModel.deleteAd(ad);
+                      }
                   );
                 }
             );

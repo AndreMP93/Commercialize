@@ -1,13 +1,11 @@
 import 'dart:io';
-
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:commercialize/helper/GetImage.dart';
 import 'package:commercialize/helper/ProductCategories.dart';
 import 'package:commercialize/model/Ad.dart';
 import 'package:commercialize/model/AppUser.dart';
 import 'package:commercialize/res/app_strings.dart';
-import 'package:commercialize/viewmodel/AuthenticationViewModel.dart';
-import 'package:commercialize/viewmodel/NewAdViewModel.dart';
+import 'package:commercialize/viewmodel/MyAdsViewModel.dart';
 import 'package:commercialize/widget/CustomButton.dart';
 import 'package:commercialize/widget/CustomTextField.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +23,6 @@ class NewAdView extends StatefulWidget {
 
 class _NewAdViewState extends State<NewAdView> {
 
-  late AppUser _currentUser;
   final _formKey = GlobalKey<FormState>();
   final List<File> _listImage = [];
   final List<DropdownMenuItem> _listStates = [];
@@ -40,7 +37,6 @@ class _NewAdViewState extends State<NewAdView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     for (var estado in Estados.listaEstadosSigla) {
       _listStates.add(DropdownMenuItem(
@@ -57,12 +53,8 @@ class _NewAdViewState extends State<NewAdView> {
   @override
   Widget build(BuildContext context) {
 
-    NewAdViewModel newAdViewModel = Provider.of<NewAdViewModel>(context);
-    AuthenticationViewModel authViewModel = Provider.of<AuthenticationViewModel>(context);
-    authViewModel.checkLoggedUser();
-    if(authViewModel.userLogged != null){
-      _currentUser = authViewModel.userLogged!;
-    }
+    MyAdsViewModel myAdsViewModel = Provider.of<MyAdsViewModel>(context);
+
     return Scaffold(
         appBar: AppBar(
           title: const Text(AppStrings.newAdTitle),
@@ -106,35 +98,7 @@ class _NewAdViewState extends State<NewAdView> {
                                     padding: const EdgeInsets.all(8),
                                     child: GestureDetector(
                                       onTap: () {
-                                        showDialog(
-                                            context: context,
-                                            builder: (contex) => Dialog(
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.min,
-                                                    children: [
-                                                      const Text(
-                                                          AppStrings.alertDialogRemoveImageTitle),
-                                                      Image.file(_listImage[index]),
-                                                      Row(
-                                                        children: [
-                                                          TextButton(
-                                                              onPressed: () {
-                                                                Navigator.of(context).pop();
-                                                              },
-                                                              child: const Text(AppStrings
-                                                                  .alertDialogNegativeButton)),
-                                                          TextButton(
-                                                              onPressed: () {
-                                                                _listImage.removeAt(index);
-                                                                Navigator.of(context).pop();
-                                                              },
-                                                              child: const Text(AppStrings
-                                                                  .alertDialogPositiveButton))
-                                                        ],
-                                                      )
-                                                    ],
-                                                  ),
-                                                ));
+                                        _showAlertDialog(index);
                                       },
                                       child: CircleAvatar(
                                         radius: 50,
@@ -242,7 +206,7 @@ class _NewAdViewState extends State<NewAdView> {
                         }),
                   ),
                   CustomTextField(
-                      labelText: AppStrings.phoneTextInput,
+                      labelText: AppStrings.phoneText,
                       controller: _phoneController,
                       keyboardType: TextInputType.number,
                       icon: const Icon(Icons.phone),
@@ -274,11 +238,11 @@ class _NewAdViewState extends State<NewAdView> {
                       padding: const EdgeInsets.all(8),
                       child: Observer(builder: (_){
                         return CustomButton(
-                            child: (newAdViewModel.isRegisteringAd)
-                                ? const CircularProgressIndicator()
+                            child: (myAdsViewModel.isRegisteringAd)
+                                ? const CircularProgressIndicator(color: Colors.white,)
                                 : const Text(AppStrings.saveButton, style: TextStyle(color: Colors.white, fontSize: 20),),
                             onPressed: () async {
-                              if (_formKey.currentState!.validate() && !newAdViewModel.isRegisteringAd) {
+                              if (_formKey.currentState!.validate() && !myAdsViewModel.isRegisteringAd) {
                                 Ad ad = Ad(
                                     state: _stateSelected,
                                     category: _categorySelected,
@@ -287,10 +251,11 @@ class _NewAdViewState extends State<NewAdView> {
                                     phone: _phoneController.text,
                                     description: _productDescriptionController.text,
                                     photos: []);
-                                newAdViewModel.registerAd(ad, _listImage, _currentUser);
-                                if (newAdViewModel.errorMessage.isNotEmpty) {
+                                await myAdsViewModel.registerAd(ad, _listImage);
+                                if (myAdsViewModel.errorMessage.isNotEmpty) {
+                                  print("ERROR: <-> ${myAdsViewModel.errorMessage} ");
                                   SnackBar snackbar =
-                                  SnackBar(content: Text(newAdViewModel.errorMessage));
+                                  SnackBar(content: Text(myAdsViewModel.errorMessage));
                                   ScaffoldMessenger.of(context).showSnackBar(snackbar);
                                 }else{
                                   Navigator.pop(context);
@@ -313,5 +278,29 @@ class _NewAdViewState extends State<NewAdView> {
         _listImage.add(image);
       });
     }
+  }
+
+  Future<void> _showAlertDialog(int index){
+    return showDialog(
+        context: context,
+        builder: (contex) => AlertDialog(
+          title: Text("Você quer remover essa image?"),
+          actions: [
+            TextButton(
+                onPressed: () {Navigator.of(context).pop();},
+                child: const Text(AppStrings
+                    .alertDialogNegativeButton)),
+            TextButton(
+                onPressed: () {
+                  setState(() {
+                    _listImage.removeAt(index);
+                  });
+                  Navigator.of(context).pop();
+                },
+                child: const Text(AppStrings
+                    .alertDialogPositiveButton))
+          ],
+        )
+    );
   }
 }

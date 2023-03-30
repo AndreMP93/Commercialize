@@ -8,10 +8,11 @@ class AppStrings{
   static const loginButton = "Entrar";
   static const registerButton = "Cadastrar";
   static const saveButton = "Salvar";
-  static const createAnAccountLabel = "Criar Anúncio";
+  static const createAnAccountLabel = "Crie um conta";
   static const registerUserLabel = "Cadastrar Usuário";
 
   //Home menu itens
+  static const filterDefault = "Todos";
   static const profileMenuItem = "Perfil";
   static const advertsMenuItem = "Meus Anúncios";
   static const loginMenuItem = "Entrar";
@@ -22,7 +23,8 @@ class AppStrings{
   static const emailError = "Endereço de email invalido.";
   static const userNameError = "Nome de usuario invalido.";
   static const errorNetworkRequestFailed = "Sem conexão a internet";
-
+  static const errorGettingAdData = "Falha ao tentar recuperar dados do Anúncio";
+  static const errorGettingUserData = "Falha ao tentar recuperar dados do Usuário";
 
   //error messages for user registration
   static const registerUserError = "Falha ao cadastrar o usuário! Tente novamente mais tarde.";
@@ -44,6 +46,7 @@ class AppStrings{
 
   //My Ads Screen
   static const myAdsTitle = "Meus Anúncios";
+  static const adDetails = "Detalhes do Anúncio";
 
   //Create Ad Screen
   static const newAdTitle = "Novo Anúncio";
@@ -56,7 +59,7 @@ class AppStrings{
   static const productsName = "Produto";
   static const productPrice = "Preço";
   static const productDescription = "Descrição";
-  static const phoneTextInput = "Telefone";
+  static const phoneText = "Telefone";
   static const requiredField = "Campo Obrigatorio";
   static const maxCharacters = "Máximo de 500 caracteres.";
 

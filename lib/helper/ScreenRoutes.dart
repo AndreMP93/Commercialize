@@ -7,6 +7,7 @@ import 'package:commercialize/view/HomeView.dart';
 import 'package:commercialize/view/LoginView.dart';
 import 'package:commercialize/view/MyAds.dart';
 import 'package:commercialize/view/RegisterUserView.dart';
+import 'package:commercialize/view/SelectedImageView.dart';
 import 'package:flutter/material.dart';
 
 class ScreenRoutes{
@@ -16,6 +17,7 @@ class ScreenRoutes{
   static const String MY_ADS_ROUTE = "/my-ads";
   static const String CREATE_AD_ROUTE = "/create-ad";
   static const String AD_DETAILS_ROUTE = "/ad-details";
+  static const String SELECTED_IMAGE_ROUTE = "/selected-image";
 
   static Route<dynamic> generateRoutes(RouteSettings setting) {
     switch (setting.name) {
@@ -41,6 +43,11 @@ class ScreenRoutes{
         final Object? args = setting.arguments;
         final parametro = args as Ad;
         return MaterialPageRoute(builder: (_) => AdDetails(ad: parametro,));
+
+      case SELECTED_IMAGE_ROUTE:
+        final Object? args = setting.arguments;
+        final parametro = args as Map<String, dynamic>;
+        return MaterialPageRoute(builder: (_) => SelectedImageView(ad: parametro["ad"], urlPhoto: parametro["urlPhoto"]));
 
       default:
         return _erroRota();

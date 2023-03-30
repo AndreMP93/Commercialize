@@ -35,7 +35,7 @@ class CloudDataBase {
       }
       return null;
     }catch(error){
-      print("ERROR: $error");
+      print("\n\nERROR: getUserData() $error \n");
       return null;
     }
   }
@@ -52,7 +52,8 @@ class CloudDataBase {
       }
       return AppStrings.updateDataUserError;
     }catch(error){
-      return "${AppStrings.updateDataUserError} $error";
+      print("ERROR: updateUserData() -> ${AppStrings.updateDataUserError} $error");
+      return "${AppStrings.updateDataUserError}:: $error";
     }
   }
 
@@ -68,6 +69,7 @@ class CloudDataBase {
       }
       return AppStrings.registerUserError;
     }catch(onError){
+      print("ERROR: registerUserData() -> ${AppStrings.registerUserError}: $onError");
       return "${AppStrings.registerUserError}: $onError";
     }
   }
@@ -75,9 +77,10 @@ class CloudDataBase {
   Future<String> registerAd(Ad ad) async{
     try{
       ad.id = _fireStore.collection(_adsCollection).doc().id;
-      await _fireStore.collection(_adsCollection).doc(ad.id).set(ad.toMap());
+      final result = await _fireStore.collection(_adsCollection).doc(ad.id).set(ad.toMap());
       return "";
     }catch(error){
+      print("ERROR: registerAd() -> ${AppStrings.registerAdError}: $error");
       return "${AppStrings.registerAdError}: $error";
     }
   }
@@ -87,6 +90,7 @@ class CloudDataBase {
       await _fireStore.collection(_adsCollection).doc(ad.id).update(ad.toMap());
       return "";
     }catch(error){
+      print("ERROr: -> updateAd() ${AppStrings.registerAdError} $error");
       return "${AppStrings.registerAdError} $error";
     }
   }
@@ -102,7 +106,23 @@ class CloudDataBase {
       }
       return listAds;
     }catch(error){
+      print("\n.\n ERRO: getAllUserAds() -> $error \n.");
       return [];
+    }
+  }
+
+  Future<List<Ad>> getAllAds() async {
+    List<Ad> ads = [];
+    try{
+      final QuerySnapshot result = await _fireStore.collection(_adsCollection).get();
+      for (var document in result.docs) {
+        Ad ad = Ad.map(document.data() as Map<String, dynamic>);
+        ads.add(ad);
+      }
+      return ads;
+    }catch(error){
+      print("ERROR: getAllAds() -> $error");
+      return ads;
     }
   }
 
@@ -120,9 +140,19 @@ class CloudDataBase {
 
   Future<String> deleteAd(Ad ad) async{
     try{
+      final pastaRaiz = _storageInstance.ref();
+      final adPath = pastaRaiz.child(_productPhotosPath).child(ad.id);
+      final ListResult result = await adPath.listAll();
+      final List<Future<void>> futures = [];
+      result.items.forEach((Reference ref) {
+        futures.add(ref.delete());
+      });
+      // Esperar a exclusão de todos os objetos
+      await Future.wait(futures);
       await _fireStore.collection(_adsCollection).doc(ad.id).delete();
       return "";
     }catch(error){
+      print("ERROR: deleteAd() -> $error");
       return "Error: -> $error";
     }
   }
@@ -150,8 +180,17 @@ class CloudDataBase {
       ad.photos.add(urlPhoto);
       return "";
     }catch (e){
+      print("ERROR: uploadProductPhoto -> $uploadProductPhoto()");
       return e.toString();
     }
   }
 
+  Future<void> deleteProductPhoto(String urlPhoto) async {
+    try {
+      final fileRef = _storageInstance.refFromURL(urlPhoto);
+      await fileRef.delete();
+    } catch (e) {
+      print("Erro ao deletar imagem: $e");
+    }
+  }
 }

@@ -42,4 +42,13 @@ class Ad {
       "photos": photos
     };
   }
+  copy(Ad ad){
+    id = ad.id;
+    state = ad.state;
+    category = ad.category;
+    title = ad.title;
+    price = ad.price;
+    phone = ad.phone;
+    photos = ad.photos;
+  }
 }
