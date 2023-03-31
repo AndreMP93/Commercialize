@@ -1,16 +1,16 @@
 # commercialize
 
-A new Flutter project.
+Este é um projeto de uma aplicação mobile construida com o Flutter e seguindo o padrão arquitetural MVVM, ela foi desenvolvida para fins de aprendizado. O projeto consiste um aplicativo de postagem de anúncios de venda de produtos. Ele é uma versão simplificada de aplicativo como Mercado Livre e OXL.
 
-## Getting Started
+## Tecnologias e Bibliotecas
 
-This project is a starting point for a Flutter application.
+Este aplicativo foi construído com o Flutter e utiliza as seguintes bibliotecas:
 
-A few resources to get you started if this is your first Flutter project:
+- `Provider` e `MobX`: para gerenciamento de estado;
+- `Firebase`: para fazer a autenticação de usuários e armazenamento de dados;
+- `image_picker`: para selecionar imagens da galeria ou da câmera do dispositivo.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Capturas de Tela
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<img src="screenshot/tela_login.png" alt="tela login" width="250"/> <img src="screenshot/tela_cadastro.png" alt="tela cadastro" width="250"/> <img src="screenshot/tela_principal.png" alt="tela principal" width="250"/> <img src="screenshot/detalhes_anuncio.png" alt="detalhes anuncio" width="250"/> <img src="screenshot/meus_anuncios.png" alt="meus_anuncios" width="250"/> <img src="screenshot/detalhes_meus_anuncios.png" alt="detalhes_meus_anuncios" width="250"/> <img src="screenshot/novo_anuncio.png" alt="novo_anuncio" width="250"/>
+
