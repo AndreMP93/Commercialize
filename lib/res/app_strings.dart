@@ -60,6 +60,8 @@ class AppStrings{
   static const productPrice = "Preço";
   static const productDescription = "Descrição";
   static const phoneText = "Telefone";
+  static const categoryText = "Categoria";
+  static const stateText = "Estado";
   static const requiredField = "Campo Obrigatorio";
   static const maxCharacters = "Máximo de 500 caracteres.";
 

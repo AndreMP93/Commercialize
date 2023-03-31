@@ -1,10 +1,11 @@
 class ProducyCategories{
   static const List<String> listCategories = [
-    "Automóveis",
+    "Veículos",
     "Imóveis",
     "Eletronicos",
     "Moda",
     "Mobília",
-    "Esporte"
+    "Esporte",
+    "Outros"
   ];
 }

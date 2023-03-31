@@ -67,7 +67,7 @@ class _MyAdsState extends State<MyAds> {
                       title: Text(ad.title, style: const TextStyle( fontSize: 18, fontWeight: FontWeight.bold )),
                       price: Text(ad.price),
                       urlProductPhoto: ad.photos[0],
-                      showAdDetails: (){Navigator.pushNamed(context, ScreenRoutes.AD_DETAILS_ROUTE, arguments: ad);},
+                      showAdDetails: (){Navigator.pushNamed(context, ScreenRoutes.DETAILS_MY_ADS_ROUTE, arguments: ad);},
                       deleteAd: () async {
                         await myAdsViewModel.deleteAd(ad);
                       }

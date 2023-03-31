@@ -126,6 +126,28 @@ class CloudDataBase {
     }
   }
 
+  Future<List<Ad>> getAdsWithFilterApplied(String? state, String? category) async {
+    List<Ad> ads = [];
+    try{
+      Query query = _fireStore.collection(_adsCollection);
+      if(state!=null){
+        query = query.where("state", isEqualTo: state);
+      }
+      if(category != null){
+        query = query.where("category", isEqualTo: category);
+      }
+      final QuerySnapshot result = await query.get();
+      for (var document in result.docs) {
+        Ad ad = Ad.map(document.data() as Map<String, dynamic>);
+        ads.add(ad);
+      }
+      return ads;
+    }catch(error){
+      print("ERROR: getAdsWithFilterApplied($state, $category) -> $error");
+      return ads;
+    }
+  }
+
   Future<Ad?> getAd(Ad ad) async{
     try{
       final result = await _fireStore.collection(_adsCollection).doc(ad.id).get();

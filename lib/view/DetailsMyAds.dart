@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:commercialize/helper/GetImage.dart';
 import 'package:commercialize/helper/ProductCategories.dart';
@@ -16,15 +15,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
-class AdDetails extends StatefulWidget {
+class DetailsMyAds extends StatefulWidget {
   final Ad ad;
-  const AdDetails({required this.ad, Key? key}) : super(key: key);
+  const DetailsMyAds({required this.ad, Key? key}) : super(key: key);
 
   @override
-  State<AdDetails> createState() => _AdDetailsState();
+  State<DetailsMyAds> createState() => _DetailsMyAdsState();
 }
 
-class _AdDetailsState extends State<AdDetails> {
+class _DetailsMyAdsState extends State<DetailsMyAds> {
   late Ad _ad;
   late Widget _addPhotoButton;
   late List<Widget> _itensCarousel;
@@ -38,7 +37,7 @@ class _AdDetailsState extends State<AdDetails> {
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-
+  
   @override
   void initState() {
     super.initState();
@@ -219,14 +218,14 @@ class _AdDetailsState extends State<AdDetails> {
 
   List<Widget> _getItensCarousel(List<dynamic> urlPhotos) {
     _itensCarousel = urlPhotos.map((item) => Container(
+      padding: EdgeInsets.all(5),
       width: MediaQuery.of(context).size.height * 0.7,
       child: GestureDetector(
         child: Center(
           child: Image.network(item, fit: BoxFit.cover, height: 400.0,),
         ),
-        onTap: (){
+        onTap: ()async{
           Navigator.pushNamed(context, ScreenRoutes.SELECTED_IMAGE_ROUTE, arguments: {"ad": _ad, "urlPhoto": item});
-          _myAdsViewModel.updateAd(_ad);
         },
       ),
     )).toList();
@@ -328,4 +327,5 @@ class _AdDetailsState extends State<AdDetails> {
         }
     );
   }
+
 }

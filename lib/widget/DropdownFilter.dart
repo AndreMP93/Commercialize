@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:validadores/validadores.dart';
 
 class DropdownFilter extends StatefulWidget {
-  const DropdownFilter({Key? key}) : super(key: key);
+  final Function(String) onChangedState;
+  final Function(String) onChangedCategory;
+  const DropdownFilter({required this.onChangedState,required this.onChangedCategory ,Key? key}) : super(key: key);
 
   @override
   State<DropdownFilter> createState() => _DropdownFilterState();
@@ -47,17 +49,19 @@ class _DropdownFilterState extends State<DropdownFilter> {
               padding: const EdgeInsets.only(right: 8),
               child: DropdownButtonFormField(
                 icon: const Icon(Icons.keyboard_arrow_down),
-                decoration: InputDecoration(border: OutlineInputBorder(
+                decoration: InputDecoration(
+                  labelText: AppStrings.stateDropDown,
+                  border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(25),
                   ),
-                  contentPadding: const EdgeInsets.fromLTRB(8, 0, 4, 0),
+                  contentPadding: const EdgeInsets.fromLTRB(18, 0, 4, 0),
                 ),
                 items: _listStates,
                 value: _stateSelected,
-                hint: const Text(AppStrings.stateDropDown),
                 style: const TextStyle(color: Colors.black, fontSize: 18),
                 onChanged: (value) {
                   _stateSelected = value;
+                  widget.onChangedState(_stateSelected);
                 },
                 validator: (value) {
                   return Validador()
@@ -67,21 +71,24 @@ class _DropdownFilterState extends State<DropdownFilter> {
               ),
             )),
         Expanded(
-            child: Padding(
+            child: Container(
               padding: const EdgeInsets.only(left: 8),
               child: DropdownButtonFormField(
                 icon: const Icon(Icons.keyboard_arrow_down),
-                decoration: InputDecoration(border: OutlineInputBorder(
+                decoration: InputDecoration(
+                  labelText: AppStrings.categoryDropDown,
+                  border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(25),
                 ),
-                  contentPadding: const EdgeInsets.fromLTRB(8, 0, 4, 0),
+                  contentPadding: const EdgeInsets.fromLTRB(18, 0, 4, 0),
                 ),
-                value: _categorySelected,
+                value: _categorySelected,isExpanded: true,
                 items: _listCategory,
-                hint: const Text(AppStrings.categoryDropDown),
+                hint: const Text(AppStrings.stateDropDown),
                 style: const TextStyle(color: Colors.black, fontSize: 18),
-                onChanged: (value) {
+                onChanged: (value) async {
                   _categorySelected = value;
+                  await widget.onChangedCategory(_categorySelected);
                 },
                 validator: (value) {
                   return Validador()

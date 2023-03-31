@@ -17,7 +17,6 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-
   late AuthenticationViewModel _authViewModel;
   late HomeViewModel _homeViewModel;
   final List<String> _menuItensUserLogged = [
@@ -26,6 +25,8 @@ class _HomeViewState extends State<HomeView> {
     AppStrings.logoutMenuItem
   ];
   final List<String> _menuItensUserNotLogged = [AppStrings.loginMenuItem];
+
+
 
   @override
   void initState() {
@@ -40,54 +41,68 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     _authViewModel = Provider.of<AuthenticationViewModel>(context);
     _homeViewModel = Provider.of<HomeViewModel>(context);
-    return
-      Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: const Text(AppStrings.appName),
           actions: [
-            IconButton(onPressed: (){}, icon: const Icon(Icons.search, color: Colors.white,)),
+            IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.search,
+                  color: Colors.white,
+                )),
             PopupMenuButton<String>(
                 onSelected: _selectedMenuItem,
-                itemBuilder: (context){
-                  return (_authViewModel.userLogged==null)
-                      ? _menuItensUserNotLogged.map((String item){
-                    return PopupMenuItem(value: item, child: Text(item),);
-                  }).toList()
-                      : _menuItensUserLogged.map((String item){
-                    return PopupMenuItem(value: item, child: Text(item),);
-                  }).toList();
-                }
-            )
+                itemBuilder: (context) {
+                  return (_authViewModel.userLogged == null)
+                      ? _menuItensUserNotLogged.map((String item) {
+                          return PopupMenuItem(
+                            value: item,
+                            child: Text(item),
+                          );
+                        }).toList()
+                      : _menuItensUserLogged.map((String item) {
+                          return PopupMenuItem(
+                            value: item,
+                            child: Text(item),
+                          );
+                        }).toList();
+                })
           ],
         ),
-        body: Observer(builder: (_){
-          return Container(
-              padding: const EdgeInsets.all(16),
-              child: (_homeViewModel.isLoadingAds)
-                  ? const Center(child: CircularProgressIndicator(),)
-                  :
-              Column(
-                children: [
-                  DropdownFilter(),
-                  SizedBox(height: 5,),
-                  Expanded(child: GridView.builder(
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 8,
-                          mainAxisSpacing: 8
-                      ),
-                      itemCount: _homeViewModel.allAds.length,
-                      itemBuilder: (BuildContext context, int index){
-                        Ad ad = _homeViewModel.allAds[index];
-                        return HomeAdItemGridView(ad: ad, showDetails: (){});
-                      }
-                  ))
-                ],
-              )
-
-          );
-        })
-      );
+        body: Container(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                DropdownFilter(
+                  onChangedState: _onChangedStateDropdown,
+                  onChangedCategory: _onChangedCategoryDropdown,
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Observer(builder: (_) {
+                  return (_homeViewModel.isLoadingAds)
+                      ? const Expanded(
+                          child: Center(
+                          child: CircularProgressIndicator(),
+                        ))
+                      : Expanded(
+                          child: GridView.builder(
+                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2, crossAxisSpacing: 8, mainAxisSpacing: 8),
+                              itemCount: _homeViewModel.allAds.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                Ad ad = _homeViewModel.allAds[index];
+                                return HomeAdItemGridView(ad: ad, showDetails: () {
+                                  Navigator.pushNamed(context, ScreenRoutes.AD_DETAILS_ROUTE, arguments: ad);
+                                });
+                              }));
+                })
+              ],
+            ))
+        //})
+        );
   }
 
   _selectedMenuItem(String selectedItem) async {
@@ -109,4 +124,13 @@ class _HomeViewState extends State<HomeView> {
     }
   }
 
+  Future _onChangedStateDropdown(String stateSelected) async {
+    _homeViewModel.stateSelected = stateSelected;
+    await _homeViewModel.applyFilter();
+  }
+
+  Future _onChangedCategoryDropdown(String categorySelected) async {
+    _homeViewModel.categorySelected = categorySelected;
+    await _homeViewModel.applyFilter();
+  }
 }
