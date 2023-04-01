@@ -12,7 +12,7 @@ class AdDestails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Detalhes"),
+          title: const Text(AppStrings.adDetails),
         ),
         body:
             Container(
@@ -54,7 +54,7 @@ class AdDestails extends StatelessWidget {
                     ),
                     const Text(
                       "${AppStrings.productDescription}:",
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Text(ad.description),
                     const SizedBox(

@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:commercialize/helper/GetImage.dart';
-import 'package:commercialize/helper/ProductCategories.dart';
 import 'package:commercialize/helper/ScreenRoutes.dart';
 import 'package:commercialize/model/Ad.dart';
 import 'package:commercialize/res/app_colors.dart';
@@ -9,6 +8,7 @@ import 'package:commercialize/res/app_strings.dart';
 import 'package:commercialize/viewmodel/MyAdsViewModel.dart';
 import 'package:commercialize/widget/CustomAlertDialogEditData.dart';
 import 'package:commercialize/widget/CustomInputTextDialog.dart';
+import 'package:commercialize/widget/DropdownFilter.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/services.dart';
@@ -29,10 +29,6 @@ class _DetailsMyAdsState extends State<DetailsMyAds> {
   late List<Widget> _itensCarousel;
   late MyAdsViewModel _myAdsViewModel;
 
-  final List<DropdownMenuItem> _listStates = [];
-  final List<DropdownMenuItem> _listCategory = [];
-
-
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
@@ -41,15 +37,6 @@ class _DetailsMyAdsState extends State<DetailsMyAds> {
   @override
   void initState() {
     super.initState();
-    for (var estado in Estados.listaEstadosSigla) {
-      _listStates.add(DropdownMenuItem(
-        value: estado,
-        child: Text(estado),
-      ));
-    }
-    for (var category in ProducyCategories.listCategories) {
-      _listCategory.add(DropdownMenuItem(value: category, child: Text(category)));
-    }
 
     _ad = widget.ad;
 
@@ -85,7 +72,7 @@ class _DetailsMyAdsState extends State<DetailsMyAds> {
     return Scaffold(
       appBar: AppBar(title: const Text(AppStrings.adDetails),),
       body: Observer(builder: (_){
-        return (_myAdsViewModel.ad == null)?Container(child: Center(child: CircularProgressIndicator(),),)
+        return (_myAdsViewModel.ad == null)? Container(child: const Center(child: CircularProgressIndicator(),),)
             :Container(
           padding: const EdgeInsets.all(16),
           child: SingleChildScrollView(
@@ -108,40 +95,13 @@ class _DetailsMyAdsState extends State<DetailsMyAds> {
                     options: CarouselOptions(height: 200,)
                 ),
 
-                SizedBox(height: 20,),
-                Row(
-                  // crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: DropdownButtonFormField(
-                            items: _listStates,
-                            value: _myAdsViewModel.ad!.state,
-                            hint: const Text(AppStrings.stateDropDown),
-                            style: const TextStyle(color: Colors.black, fontSize: 18),
-                            onChanged: (value) async {
-                              _ad.state = value;
-                              await _myAdsViewModel.updateAd(_ad);
-                            },
-                          ),
-                        )),
-                    Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 8),
-                          child: DropdownButtonFormField(
-                            items: _listCategory,
-                            value: _myAdsViewModel.ad!.category,
-                            hint: const Text(AppStrings.categoryDropDown),
-                            style: const TextStyle(color: Colors.black, fontSize: 18),
-                            onChanged: (value) async {
-                              _ad.category = value;
-                              await _myAdsViewModel.updateAd(_ad);
-                            },
-                          ),
-                        )),
-                  ],
+                const SizedBox(height: 20,),
+                DropdownFilter(
+                    onChangedState: _onChangedStateDropdown,
+                    onChangedCategory: _onChangedCategoryDropdown,
+                    ad: _ad,
                 ),
+
                 const SizedBox(height: 8,),
                 Row(
                   children: [
@@ -218,7 +178,7 @@ class _DetailsMyAdsState extends State<DetailsMyAds> {
 
   List<Widget> _getItensCarousel(List<dynamic> urlPhotos) {
     _itensCarousel = urlPhotos.map((item) => Container(
-      padding: EdgeInsets.all(5),
+      padding: const EdgeInsets.all(5),
       width: MediaQuery.of(context).size.height * 0.7,
       child: GestureDetector(
         child: Center(
@@ -278,7 +238,6 @@ class _DetailsMyAdsState extends State<DetailsMyAds> {
               updateAdFunction: ()async{
                 _ad.price = _priceController.text;
                 await _myAdsViewModel.updateAd(_ad);
-                print("TESTE: ${_ad.title}");
               }
           );
         }
@@ -328,4 +287,13 @@ class _DetailsMyAdsState extends State<DetailsMyAds> {
     );
   }
 
+  Future<void> _onChangedStateDropdown(String valueSelected) async {
+    _ad.state = valueSelected;
+    await _myAdsViewModel.updateAd(_ad);
+  }
+
+  Future<void> _onChangedCategoryDropdown(String valueSelected) async {
+    _ad.category = valueSelected;
+    await _myAdsViewModel.updateAd(_ad);
+  }
 }

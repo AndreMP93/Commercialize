@@ -1,5 +1,6 @@
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:commercialize/helper/ProductCategories.dart';
+import 'package:commercialize/model/Ad.dart';
 import 'package:commercialize/res/app_colors.dart';
 import 'package:commercialize/res/app_strings.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,14 @@ import 'package:validadores/validadores.dart';
 class DropdownFilter extends StatefulWidget {
   final Function(String) onChangedState;
   final Function(String) onChangedCategory;
-  const DropdownFilter({required this.onChangedState,required this.onChangedCategory ,Key? key}) : super(key: key);
+  final bool isForFiltering;
+  final Ad? ad;
+  const DropdownFilter({
+    required this.onChangedState,
+    required this.onChangedCategory,
+    this.isForFiltering = false,
+    this.ad, Key? key
+  }) : super(key: key);
 
   @override
   State<DropdownFilter> createState() => _DropdownFilterState();
@@ -16,14 +24,23 @@ class DropdownFilter extends StatefulWidget {
 
 class _DropdownFilterState extends State<DropdownFilter> {
 
-  final List<DropdownMenuItem> _listStates = [const DropdownMenuItem(value: AppStrings.filterDefault, child: Text(AppStrings.filterDefault))];
+  final List<DropdownMenuItem> _listStates = [];
   String _stateSelected = AppStrings.filterDefault;
-  final List<DropdownMenuItem> _listCategory = [const DropdownMenuItem(value: AppStrings.filterDefault, child: Text(AppStrings.filterDefault))];
+  final List<DropdownMenuItem> _listCategory = [];
   String _categorySelected = AppStrings.filterDefault;
 
   @override
   void initState() {
     super.initState();
+    if(widget.isForFiltering){
+      _listStates.add(const DropdownMenuItem(value: AppStrings.filterDefault, child: Text(AppStrings.filterDefault)));
+      _listCategory.add(const DropdownMenuItem(value: AppStrings.filterDefault, child: Text(AppStrings.filterDefault)));
+    }
+
+    if(widget.ad != null){
+      _stateSelected = widget.ad!.state;
+      _categorySelected = widget.ad!.category;
+    }
 
     for (var estado in Estados.listaEstadosSigla) {
       _listStates.add(DropdownMenuItem(
@@ -57,7 +74,8 @@ class _DropdownFilterState extends State<DropdownFilter> {
                   contentPadding: const EdgeInsets.fromLTRB(18, 0, 4, 0),
                 ),
                 items: _listStates,
-                value: _stateSelected,
+                value: (widget.isForFiltering || widget.ad != null) ? _stateSelected : null,
+                hint: const Text(AppStrings.stateText),
                 style: const TextStyle(color: Colors.black, fontSize: 18),
                 onChanged: (value) {
                   _stateSelected = value;
@@ -82,9 +100,10 @@ class _DropdownFilterState extends State<DropdownFilter> {
                 ),
                   contentPadding: const EdgeInsets.fromLTRB(18, 0, 4, 0),
                 ),
-                value: _categorySelected,isExpanded: true,
+                value: (widget.isForFiltering || widget.ad != null)? _categorySelected : null,
+                isExpanded: true,
                 items: _listCategory,
-                hint: const Text(AppStrings.stateDropDown),
+                hint: const Text(AppStrings.categoryText),
                 style: const TextStyle(color: Colors.black, fontSize: 18),
                 onChanged: (value) async {
                   _categorySelected = value;

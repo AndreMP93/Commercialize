@@ -8,6 +8,7 @@ import 'package:commercialize/res/app_strings.dart';
 import 'package:commercialize/viewmodel/MyAdsViewModel.dart';
 import 'package:commercialize/widget/CustomButton.dart';
 import 'package:commercialize/widget/CustomTextField.dart';
+import 'package:commercialize/widget/DropdownFilter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -25,9 +26,9 @@ class _NewAdViewState extends State<NewAdView> {
 
   final _formKey = GlobalKey<FormState>();
   final List<File> _listImage = [];
-  final List<DropdownMenuItem> _listStates = [];
+  // final List<DropdownMenuItem> _listStates = [];
   String _stateSelected = "";
-  final List<DropdownMenuItem> _listCategory = [];
+  // final List<DropdownMenuItem> _listCategory = [];
   String _categorySelected = "";
 
   final TextEditingController _productNameController = TextEditingController();
@@ -38,16 +39,16 @@ class _NewAdViewState extends State<NewAdView> {
   @override
   void initState() {
     super.initState();
-    for (var estado in Estados.listaEstadosSigla) {
-      _listStates.add(DropdownMenuItem(
-        value: estado,
-        child: Text(estado),
-      ));
-    }
-
-    for (var category in ProducyCategories.listCategories) {
-      _listCategory.add(DropdownMenuItem(value: category, child: Text(category)));
-    }
+    // for (var estado in Estados.listaEstadosSigla) {
+    //   _listStates.add(DropdownMenuItem(
+    //     value: estado,
+    //     child: Text(estado),
+    //   ));
+    // }
+    //
+    // for (var category in ProducyCategories.listCategories) {
+    //   _listCategory.add(DropdownMenuItem(value: category, child: Text(category)));
+    // }
   }
 
   @override
@@ -135,45 +136,11 @@ class _NewAdViewState extends State<NewAdView> {
                       return null;
                     },
                   ),
-                  Row(
-                    // crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                          child: Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: DropdownButtonFormField(
-                          items: _listStates,
-                          // value: _stateSelected,
-                          hint: const Text(AppStrings.stateDropDown),
-                          style: const TextStyle(color: Colors.black, fontSize: 18),
-                          onChanged: (value) {
-                            _stateSelected = value;
-                          },
-                          validator: (value) {
-                            return Validador()
-                                .add(Validar.OBRIGATORIO, msg: AppStrings.requiredField)
-                                .valido(value);
-                          },
-                        ),
-                      )),
-                      Expanded(
-                          child: Padding(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: DropdownButtonFormField(
-                          items: _listCategory,
-                          hint: const Text(AppStrings.categoryDropDown),
-                          style: const TextStyle(color: Colors.black, fontSize: 18),
-                          onChanged: (value) {
-                            _categorySelected = value;
-                          },
-                          validator: (value) {
-                            return Validador()
-                                .add(Validar.OBRIGATORIO, msg: AppStrings.requiredField)
-                                .valido(value);
-                          },
-                        ),
-                      )),
-                    ],
+
+                  const SizedBox(height: 5,),
+                  DropdownFilter(
+                      onChangedState: (String valueSelected){_stateSelected = valueSelected;},
+                      onChangedCategory: (String valueSelected){_categorySelected = valueSelected;}
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 15),

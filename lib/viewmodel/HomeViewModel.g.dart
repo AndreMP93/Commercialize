@@ -9,6 +9,22 @@ part of 'HomeViewModel.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$HomeViewModel on _HomeViewModel, Store {
+  late final _$keywordAtom =
+      Atom(name: '_HomeViewModel.keyword', context: context);
+
+  @override
+  String? get keyword {
+    _$keywordAtom.reportRead();
+    return super.keyword;
+  }
+
+  @override
+  set keyword(String? value) {
+    _$keywordAtom.reportWrite(value, super.keyword, () {
+      super.keyword = value;
+    });
+  }
+
   late final _$stateSelectedAtom =
       Atom(name: '_HomeViewModel.stateSelected', context: context);
 
@@ -77,8 +93,9 @@ mixin _$HomeViewModel on _HomeViewModel, Store {
       AsyncAction('_HomeViewModel.getAllAds', context: context);
 
   @override
-  Future<void> getAllAds([String? state, String? category]) {
-    return _$getAllAdsAsyncAction.run(() => super.getAllAds(state, category));
+  Future<void> getAllAds([String? state, String? category, String? keyword]) {
+    return _$getAllAdsAsyncAction
+        .run(() => super.getAllAds(state, category, keyword));
   }
 
   late final _$applyFilterAsyncAction =
@@ -92,6 +109,7 @@ mixin _$HomeViewModel on _HomeViewModel, Store {
   @override
   String toString() {
     return '''
+keyword: ${keyword},
 stateSelected: ${stateSelected},
 categorySelected: ${categorySelected},
 errorMessage: ${errorMessage},

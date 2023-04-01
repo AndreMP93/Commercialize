@@ -7,7 +7,6 @@ import 'package:commercialize/viewmodel/MyAdsViewModel.dart';
 import 'package:commercialize/widget/AdItem.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 
 class MyAds extends StatefulWidget {
@@ -20,7 +19,6 @@ class MyAds extends StatefulWidget {
 class _MyAdsState extends State<MyAds> {
   late MyAdsViewModel myAdsViewModel;
   late AuthenticationViewModel authViewModel;
-  late ObservableList<Ad> _myAds;
 
   @override
   void initState() {
@@ -29,7 +27,6 @@ class _MyAdsState extends State<MyAds> {
       AppUser? user = authViewModel.userLogged;
       if(user!=null){
         await myAdsViewModel.getMyAds(user);
-        _myAds = myAdsViewModel.myAds;
       }
     });
   }

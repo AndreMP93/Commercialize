@@ -4,6 +4,7 @@ import 'package:commercialize/res/app_strings.dart';
 import 'package:commercialize/viewmodel/HomeViewModel.dart';
 import 'package:commercialize/widget/DropdownFilter.dart';
 import 'package:commercialize/widget/HomeAdItemGridView.dart';
+import 'package:commercialize/widget/SearchTextField.dart';
 import 'package:flutter/material.dart';
 import 'package:commercialize/viewmodel/AuthenticationViewModel.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -16,7 +17,8 @@ class HomeView extends StatefulWidget {
   State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> {
+class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin {
+
   late AuthenticationViewModel _authViewModel;
   late HomeViewModel _homeViewModel;
   final List<String> _menuItensUserLogged = [
@@ -25,16 +27,31 @@ class _HomeViewState extends State<HomeView> {
     AppStrings.logoutMenuItem
   ];
   final List<String> _menuItensUserNotLogged = [AppStrings.loginMenuItem];
-
-
+  final TextEditingController _searchContoller = TextEditingController();
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+  bool _isSearching = false;
 
   @override
   void initState() {
     super.initState();
+
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+    _animation = Tween<double>(begin: 0, end: 1).animate(_animationController);
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await _authViewModel.checkLoggedUser();
       await _homeViewModel.getAllAds();
     });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -43,10 +60,16 @@ class _HomeViewState extends State<HomeView> {
     _homeViewModel = Provider.of<HomeViewModel>(context);
     return Scaffold(
         appBar: AppBar(
-          title: const Text(AppStrings.appName),
+          title: const Icon(Icons.store),//const Text(AppStrings.appName),
           actions: [
-            IconButton(
-                onPressed: () {},
+            (_isSearching) ? SearchTextField(contoller: _searchContoller, startSearch: _searchProduct, cancelSearch: _stopSearch,) : Container(),
+            (_isSearching )? Container() : IconButton(
+                onPressed: () {
+                  setState(() {
+                    _isSearching = true;
+                  });
+                  _animationController.forward();
+                },
                 icon: const Icon(
                   Icons.search,
                   color: Colors.white,
@@ -77,8 +100,9 @@ class _HomeViewState extends State<HomeView> {
                 DropdownFilter(
                   onChangedState: _onChangedStateDropdown,
                   onChangedCategory: _onChangedCategoryDropdown,
+                  isForFiltering: true,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Observer(builder: (_) {
@@ -131,6 +155,22 @@ class _HomeViewState extends State<HomeView> {
 
   Future _onChangedCategoryDropdown(String categorySelected) async {
     _homeViewModel.categorySelected = categorySelected;
+    await _homeViewModel.applyFilter();
+  }
+
+  void _stopSearch() async {
+    _animationController.reverse().then((value) {
+      setState(() {
+        _isSearching = false;
+        _searchContoller.clear();
+        _homeViewModel.keyword = null;
+      });
+    });
+    await _homeViewModel.applyFilter();
+  }
+
+  Future _searchProduct() async {
+    _homeViewModel.keyword = _searchContoller.text;
     await _homeViewModel.applyFilter();
   }
 }

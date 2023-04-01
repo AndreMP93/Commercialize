@@ -9,6 +9,8 @@ abstract class _HomeViewModel with Store{
   final CloudDataBase _db = CloudDataBase();
   ObservableList<Ad> allAds = ObservableList();
   @observable
+  String? keyword;
+  @observable
   String stateSelected = AppStrings.filterDefault;
   @observable
   String categorySelected = AppStrings.filterDefault;
@@ -18,11 +20,11 @@ abstract class _HomeViewModel with Store{
   bool isLoadingAds = true;
 
   @action
-  Future<void> getAllAds([String? state, String? category]) async {
+  Future<void> getAllAds([String? state, String? category, String? keyword]) async {
     isLoadingAds = true;
     try{
       allAds.clear();
-      List<Ad> result = await _db.getAdsWithFilterApplied(state, category);
+      List<Ad> result = await _db.getAdsWithFilterApplied(state, category, keyword);
       allAds.addAll(result);
     }catch(error){
       errorMessage = error.toString();
@@ -40,7 +42,12 @@ abstract class _HomeViewModel with Store{
     if(categorySelected != AppStrings.filterDefault){
       category = categorySelected;
     }
-    await getAllAds(state, category);
+    if(keyword != null){
+      await getAllAds(state, category, keyword);
+    }else{
+      await getAllAds(state, category, null);
+    }
+
   }
 
 

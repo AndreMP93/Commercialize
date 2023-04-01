@@ -126,10 +126,15 @@ class CloudDataBase {
     }
   }
 
-  Future<List<Ad>> getAdsWithFilterApplied(String? state, String? category) async {
+  Future<List<Ad>> getAdsWithFilterApplied(String? state, String? category, String? keyword) async {
     List<Ad> ads = [];
     try{
       Query query = _fireStore.collection(_adsCollection);
+      if(keyword != null){
+        query = query.where("title", isGreaterThanOrEqualTo: keyword)
+            .where("title", isLessThan: '${keyword}z')
+            .orderBy("title");
+      }
       if(state!=null){
         query = query.where("state", isEqualTo: state);
       }
